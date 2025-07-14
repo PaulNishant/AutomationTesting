@@ -1,0 +1,224 @@
+package javaproject;
+
+public class EduPro {
+    public static void main(String[] args) {
+    	System.out.println("Hello");
+        // Creating Students
+        Student divisha = new Student("Divisha", "divisha@mail.com", "S001");
+        Student dishu = new Student("Dishu", "dishu@mail.com", "S002");
+
+        // Creating Instructors
+        Instructor sandesh = new Instructor("Sandesh", "sandesh@lms.com", "I001");
+        Instructor neha = new Instructor("Neha", "neha@lms.com", "I002");
+        System.out.println("Hello2");
+        // Creating Admin
+        Admin admin = new Admin("AdminUser", "admin@lms.com", "A001");
+
+        // Instructors create courses
+        sandesh.createCourse("Java Basics");
+        sandesh.createCourse("Spring Boot");
+        neha.createCourse("HTML & CSS");
+        neha.createCourse("Python");
+
+        // Students enroll in courses
+        divisha.enrollCourse("Java Basics");
+        divisha.enrollCourse("HTML & CSS");
+        dishu.enrollCourse("Python");
+        dishu.enrollCourse("Spring Boot");
+
+        // View Profiles
+        System.out.println("\n--- STUDENT PROFILES ---");
+        divisha.viewProfile();
+        dishu.viewProfile();
+
+        System.out.println("\n--- INSTRUCTOR PROFILES ---");
+        sandesh.viewProfile();
+        neha.viewProfile();
+
+        System.out.println("\n--- ADMIN PROFILE ---");
+        admin.viewProfile();
+
+        // Track student progress
+        System.out.println("\n--- TRACKING STUDENT PROGRESS ---");
+        divisha.trackProgress();
+        dishu.trackProgress();
+
+        // Admin removes a user
+        System.out.println("\n--- ADMIN ACTION ---");
+        admin.removeUser(dishu);
+
+        // Show Course Details
+        System.out.println("\n--- COURSE DETAILS ---");
+        Course c1 = new Course("Java Basics", 40, 50);
+        Course c2 = new Course("Python");
+
+        c1.showCourseDetails();
+        c2.showCourseDetails();
+    }
+}
+
+// ========== ABSTRACT CLASS: USER ==========
+abstract class User {
+    private String name;
+    private String email;
+    private String userId;
+
+    public User(String name, String email, String userId) {
+        this.name = name;
+        this.email = email;
+        this.userId = userId;
+    }
+
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public String getUserId() { return userId; }
+
+    public final void displayWelcome() {
+        System.out.println("Welcome, " + name + "!");
+    }
+
+    public abstract void viewProfile();
+}
+
+// ========== INTERFACE ==========
+interface ProgressTrackable {
+    void trackProgress();
+}
+
+// ========== CLASS: STUDENT ==========
+class Student extends User implements ProgressTrackable {
+    private String enrolledCourse1;
+    private String enrolledCourse2;
+
+    public Student(String name, String email, String userId) {
+        super(name, email, userId);
+    }
+
+    public void enrollCourse(java.lang.String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Student(java.lang.String string, java.lang.String string2, java.lang.String string3) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void enrollCourse(String courseName) {
+        if (enrolledCourse1 == null) {
+            enrolledCourse1 = courseName;
+        } else if (enrolledCourse2 == null) {
+            enrolledCourse2 = courseName;
+        } else {
+            System.out.println(getName() + " is already enrolled in 2 courses.");
+        }
+    }
+
+    @Override
+    public void viewProfile() {
+        displayWelcome();
+        System.out.println("Student ID: " + getUserId());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Courses: " + enrolledCourse1 + ", " + enrolledCourse2);
+    }
+
+    @Override
+    public void trackProgress() {
+        System.out.println(getName() + " is tracking progress in: " +
+            (enrolledCourse1 != null ? enrolledCourse1 : "") +
+            (enrolledCourse2 != null ? ", " + enrolledCourse2 : ""));
+    }
+}
+
+// ========== CLASS: INSTRUCTOR ==========
+class Instructor extends User {
+    private String createdCourse1;
+    private String createdCourse2;
+
+    public Instructor(String name, String email, String userId) {
+        super(name, email, userId);
+    }
+
+    public void createCourse(java.lang.String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Instructor(java.lang.String string, java.lang.String string2, java.lang.String string3) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void createCourse(String courseName) {
+        if (createdCourse1 == null) {
+            createdCourse1 = courseName;
+        } else if (createdCourse2 == null) {
+            createdCourse2 = courseName;
+        } else {
+            System.out.println(getName() + " has already created 2 courses.");
+        }
+    }
+
+    //Override
+    public void viewProfile() {
+        displayWelcome();
+        System.out.println("Instructor ID: " + getUserId());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Courses Created: " + createdCourse1 + ", " + createdCourse2);
+    }
+}
+
+// ========== CLASS: ADMIN ==========
+class Admin extends User {
+	super(name, email, userId);
+    public Admin(String name, String email, String userId) {
+        super(name, email, userId);
+    }
+
+    public Admin(java.lang.String string, java.lang.String string2, java.lang.String string3) {
+	}
+
+	public void removeUser(User user) {
+        System.out.println("Admin removed user: " + user.getName());
+    }
+
+    //Override
+    public void viewProfile() {
+        displayWelcome();
+        System.out.println("Admin ID: " + getUserId());
+        System.out.println("Email: " + getEmail());
+    }
+}
+
+// ========== CLASS: COURSE ==========
+class Course {
+    private String title;
+    private int durationInHours;
+    private final int maxStudents;
+
+    
+    public Course(String title, int durationInHours, int maxStudents) {
+        this.title = title;
+        this.durationInHours = durationInHours;
+        this.maxStudents = maxStudents;
+    }
+
+  
+    public Course(String title) {
+        this(title, 30, 40); // default values
+    }
+
+    public Course(java.lang.String string, int durationInHours2, int maxStudents2) {
+		this.maxStudents = 0;
+		
+	}
+
+	public Course(java.lang.String string) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public void showCourseDetails() {
+        System.out.println("Course Title: " + title);
+        System.out.println("Duration: " + durationInHours + " hours");
+        System.out.println("Max Students: " + maxStudents);
+    }
+}
