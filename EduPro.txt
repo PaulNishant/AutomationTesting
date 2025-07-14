@@ -1,224 +1,148 @@
 package javaproject;
 
-public class EduPro {
+// Main class
+public class EduPro { //contain main methid
     public static void main(String[] args) {
-    	System.out.println("Hello");
-        // Creating Students
+
+        // Creating student objects Objects Create (Student, Instructor, Admin)
+    	//Student class ka ek object divisha create kari hei. Constructor ko 3 values di gayi: naam, email, aur ID.
         Student divisha = new Student("Divisha", "divisha@mail.com", "S001");
         Student dishu = new Student("Dishu", "dishu@mail.com", "S002");
 
-        // Creating Instructors
+        // Creating instructor objects
         Instructor sandesh = new Instructor("Sandesh", "sandesh@lms.com", "I001");
         Instructor neha = new Instructor("Neha", "neha@lms.com", "I002");
-        System.out.println("Hello2");
-        // Creating Admin
+
+        // Creating admin object
         Admin admin = new Admin("AdminUser", "admin@lms.com", "A001");
 
         // Instructors create courses
-        sandesh.createCourse("Java Basics");
-        sandesh.createCourse("Spring Boot");
-        neha.createCourse("HTML & CSS");
-        neha.createCourse("Python");
+        sandesh.createCourse("manual");
+        neha.createCourse("Auto");
 
         // Students enroll in courses
-        divisha.enrollCourse("Java Basics");
-        divisha.enrollCourse("HTML & CSS");
+        divisha.enrollCourse("Java Programming");  //Student Divisha Java Programming course mein enroll kiya hei
         dishu.enrollCourse("Python");
-        dishu.enrollCourse("Spring Boot");
 
-        // View Profiles
-        System.out.println("\n--- STUDENT PROFILES ---");
-        divisha.viewProfile();
+        // Showing profiles
+        System.out.println("\n--- Student Profiles ---"); //print karega 
+        divisha.viewProfile(); //Dono students ka profile print karega (naam, ID, email, course).
         dishu.viewProfile();
 
-        System.out.println("\n--- INSTRUCTOR PROFILES ---");
+        System.out.println("\n--- Instructor Profiles ---");
         sandesh.viewProfile();
         neha.viewProfile();
 
-        System.out.println("\n--- ADMIN PROFILE ---");
+        System.out.println("\n--- Admin Profile ---");
         admin.viewProfile();
-
-        // Track student progress
-        System.out.println("\n--- TRACKING STUDENT PROGRESS ---");
-        divisha.trackProgress();
-        dishu.trackProgress();
-
-        // Admin removes a user
-        System.out.println("\n--- ADMIN ACTION ---");
-        admin.removeUser(dishu);
-
-        // Show Course Details
-        System.out.println("\n--- COURSE DETAILS ---");
-        Course c1 = new Course("Java Basics", 40, 50);
-        Course c2 = new Course("Python");
-
-        c1.showCourseDetails();
-        c2.showCourseDetails();
     }
 }
 
-// ========== ABSTRACT CLASS: USER ==========
+// Base class: User //User Class: Base Abstract Class
+//user ek abstract class hai — iska matlab aap is class ka object directly nahi bana sakte,
+//but inherited classes (jaise Student, Instructor) bana sakty hain.
 abstract class User {
     private String name;
     private String email;
     private String userId;
 
+    // Constructor
     public User(String name, String email, String userId) {
         this.name = name;
         this.email = email;
         this.userId = userId;
     }
 
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getUserId() { return userId; }
-
-    public final void displayWelcome() {
-        System.out.println("Welcome, " + name + "!");
+    // Getter methods //  Constructor — jab bhi object banega, ye values initialize karega.
+    public String getName() {
+        return name;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getUserId() {
+        return userId;
     }
 
+    // Method that cannot be overridden //Getter methods — private variables ko access karne ke liye.
+    public final void displayWelcome() {
+        System.out.println("Welcome, " + name);
+    }
+
+    // Abstract method to be implemented by child classes
+//Final method — "Welcome" message print karta hai. Final ka matlab: ye method override nahi ho sakta.
     public abstract void viewProfile();
 }
 
-// ========== INTERFACE ==========
+// Interface for tracking progress
+//Interface hai — koi bhi class jo ise implement karegi usko trackProgress() method ka code likhna padega.
 interface ProgressTrackable {
     void trackProgress();
 }
 
-// ========== CLASS: STUDENT ==========
+// Child class: Student
+//Student class, User ko inherit kar rahi hai aur ProgressTrackable interface implement kar rahi hai.
 class Student extends User implements ProgressTrackable {
-    private String enrolledCourse1;
-    private String enrolledCourse2;
-
+    private String enrolledCourse;
+//Student ne kaunsa course liya hai — wo yahan store hoga.
+    // Constructor uses super keyword to call parent class constructor
     public Student(String name, String email, String userId) {
-        super(name, email, userId);
+        super(name, email, userId); // super is used here 
+
+    // Method to enroll in course
+    public void enrollCourse(String course) {
+        this.enrolledCourse = course; //Student course mein enroll hota hai.
     }
 
-    public void enrollCourse(java.lang.String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Student(java.lang.String string, java.lang.String string2, java.lang.String string3) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public void enrollCourse(String courseName) {
-        if (enrolledCourse1 == null) {
-            enrolledCourse1 = courseName;
-        } else if (enrolledCourse2 == null) {
-            enrolledCourse2 = courseName;
-        } else {
-            System.out.println(getName() + " is already enrolled in 2 courses.");
-        }
-    }
-
-    @Override
+    // Overriding abstract method
     public void viewProfile() {
         displayWelcome();
         System.out.println("Student ID: " + getUserId());
         System.out.println("Email: " + getEmail());
-        System.out.println("Courses: " + enrolledCourse1 + ", " + enrolledCourse2);
+        System.out.println("Enrolled Course: " + enrolledCourse);
     }
 
-    @Override
+    // Implementing interface method
     public void trackProgress() {
-        System.out.println(getName() + " is tracking progress in: " +
-            (enrolledCourse1 != null ? enrolledCourse1 : "") +
-            (enrolledCourse2 != null ? ", " + enrolledCourse2 : ""));
+        System.out.println(getName() + " is tracking progress in " + enrolledCourse);
     }
 }
 
-// ========== CLASS: INSTRUCTOR ==========
+// Child class: Instructor
 class Instructor extends User {
-    private String createdCourse1;
-    private String createdCourse2;
+    private String createdCourse;
 
+    // Constructor uses super keyword
     public Instructor(String name, String email, String userId) {
-        super(name, email, userId);
+        super(name, email, userId); // super is used here
     }
 
-    public void createCourse(java.lang.String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Instructor(java.lang.String string, java.lang.String string2, java.lang.String string3) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public void createCourse(String courseName) {
-        if (createdCourse1 == null) {
-            createdCourse1 = courseName;
-        } else if (createdCourse2 == null) {
-            createdCourse2 = courseName;
-        } else {
-            System.out.println(getName() + " has already created 2 courses.");
-        }
+    // Method to create a course
+    public void createCourse(String course) {
+        this.createdCourse = course;
     }
 
-    //Override
+    // Overriding viewProfile method
     public void viewProfile() {
         displayWelcome();
         System.out.println("Instructor ID: " + getUserId());
         System.out.println("Email: " + getEmail());
-        System.out.println("Courses Created: " + createdCourse1 + ", " + createdCourse2);
+        System.out.println("Created Course: " + createdCourse);
     }
 }
 
-// ========== CLASS: ADMIN ==========
+// Child class: Admin
 class Admin extends User {
-	super(name, email, userId);
+
+    // Constructor uses super keyword
     public Admin(String name, String email, String userId) {
-        super(name, email, userId);
+        super(name, email, userId); // super is used here
     }
 
-    public Admin(java.lang.String string, java.lang.String string2, java.lang.String string3) {
-	}
-
-	public void removeUser(User user) {
-        System.out.println("Admin removed user: " + user.getName());
-    }
-
-    //Override
+    // Overriding viewProfile method
     public void viewProfile() {
         displayWelcome();
         System.out.println("Admin ID: " + getUserId());
         System.out.println("Email: " + getEmail());
-    }
-}
-
-// ========== CLASS: COURSE ==========
-class Course {
-    private String title;
-    private int durationInHours;
-    private final int maxStudents;
-
-    
-    public Course(String title, int durationInHours, int maxStudents) {
-        this.title = title;
-        this.durationInHours = durationInHours;
-        this.maxStudents = maxStudents;
-    }
-
-  
-    public Course(String title) {
-        this(title, 30, 40); // default values
-    }
-
-    public Course(java.lang.String string, int durationInHours2, int maxStudents2) {
-		this.maxStudents = 0;
-		
-	}
-
-	public Course(java.lang.String string) {
-		// TODO Auto-generated constructor stub
-	}
-
-
-	public void showCourseDetails() {
-        System.out.println("Course Title: " + title);
-        System.out.println("Duration: " + durationInHours + " hours");
-        System.out.println("Max Students: " + maxStudents);
     }
 }
